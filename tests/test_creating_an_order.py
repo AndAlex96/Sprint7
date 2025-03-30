@@ -1,12 +1,14 @@
 import pytest
 import requests
 import allure
+from app.urls import BASE_URL
 
+@allure.title('Тест создания заказа')
 class TestCreatingOrder:
 
 
     @pytest.mark.parametrize("color", [(["BLACK"]), (["GREY"]), (["BLACK", "GREY"]),([])])
-    @allure.title(f'Проверка создания заказа c одним, двумя цветами и без выбора цвета')
+    @allure.step(f'Проверка создания заказа c одним, двумя цветами и без выбора цвета')
     def test_creating_an_order_with_color(self,     color):
         payload = {
             "firstName": "Андрей",
@@ -19,7 +21,7 @@ class TestCreatingOrder:
             "comment": "Жду заказ",
             "color": color
         }
-        response = requests.post('https://qa-scooter.praktikum-services.ru/api/v1/orders', data=payload)
+        response = requests.post(f'{BASE_URL}/api/v1/orders', data=payload)
 
         assert response.status_code == 201
         assert 'track' in response.json()
